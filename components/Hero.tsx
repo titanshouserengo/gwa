@@ -1,14 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from './Button';
 import { ArrowRight, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Hero: React.FC = () => {
-  const scrollToPlans = () => {
-    document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth' });
+  const [hoursText, setHoursText] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const today = new Date().getDay(); // 0 = Sun, 1 = Mon, ... 6 = Sat
+    let closingTime = "";
+
+    // Mon (1) to Fri (5)
+    if (today >= 1 && today <= 5) {
+      closingTime = "23:00";
+    } 
+    // Saturday (6)
+    else if (today === 6) {
+      closingTime = "14:00";
+    } 
+    // Sunday (0)
+    else {
+      closingTime = "14:00";
+    }
+
+    setHoursText(`Abierto Hoy hasta las ${closingTime}`);
+  }, []);
+
+  const openWhatsAppFreeTrial = () => {
+    const message = "Hola! Quiero mi prueba gratuita en Titans House.";
+    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const scrollToCommunity = () => {
+    const element = document.getElementById('community');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
-    <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-zinc-900">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -40,19 +72,19 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button onClick={scrollToPlans} className="group flex items-center justify-center gap-2">
+            <Button onClick={openWhatsAppFreeTrial} className="group flex items-center justify-center gap-2">
               Comienza tu Prueba Gratuita
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" onClick={() => document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Button variant="outline" onClick={scrollToCommunity}>
               Ver Comunidad
             </Button>
           </div>
           
           <div className="mt-12 flex items-center gap-8 text-sm text-gray-400 font-medium">
              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                <span>Abierto Hoy hasta las 23:00</span>
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span>{hoursText}</span>
              </div>
              <div className="hidden sm:block">|</div>
              <div>Rinconada de Malambo 1670-B</div>

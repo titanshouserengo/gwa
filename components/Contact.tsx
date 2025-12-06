@@ -18,6 +18,9 @@ export const Contact: React.FC = () => {
     window.open(`https://wa.me/56962169412?text=${encodeURIComponent(text)}`, '_blank');
   };
 
+  // Using the Business Name in the query ensures the pin is on the correct business location
+  const mapUrl = "https://www.google.com/maps?q=Gym+Titans+House+Rengo&output=embed";
+
   return (
     <section id="contact" className="py-24 bg-black relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +44,7 @@ export const Contact: React.FC = () => {
                   <h4 className="text-white font-bold uppercase mb-1">Dirección</h4>
                   <p className="text-gray-400">Rinconada de Malambo 1670-B</p>
                   <p className="text-gray-500 text-sm">Rengo, O'Higgins, Chile</p>
-                  <a href="https://maps.google.com/?q=Titans+House+Rengo" target="_blank" rel="noreferrer" className="text-titan-gold text-sm underline mt-1 block hover:text-white">Ver en Google Maps</a>
+                  <a href="https://maps.app.goo.gl/HTWBhcawZDuG7ZG49" target="_blank" rel="noreferrer" className="text-titan-gold text-sm underline mt-1 block hover:text-white">Ver en Google Maps</a>
                 </div>
               </div>
 
@@ -128,7 +131,7 @@ export const Contact: React.FC = () => {
         {/* Map Embed */}
         <div className="mt-16 w-full h-80 rounded-sm overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
            <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3310.866032158882!2d-70.8655829244309!3d-34.40989264870094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x96637b3b3a3a3a3b%3A0x1a2b3c4d5e6f7g8h!2sRinconada%20de%20Malambo%201670%2C%20Rengo%2C%20O'Higgins!5e0!3m2!1ses!2sch!4v1700000000000!5m2!1ses!2sch" 
+            src={mapUrl}
             width="100%" 
             height="100%" 
             style={{border:0}} 

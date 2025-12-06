@@ -6,11 +6,13 @@ export interface NavItem {
 }
 
 export interface Plan {
+  id: string;
   name: string;
   price: string;
   period: string;
   features: string[];
   recommended?: boolean;
+  description?: string;
 }
 
 export interface Testimonial {

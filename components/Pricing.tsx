@@ -1,55 +1,10 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import { Button } from './Button';
-import { Plan } from '../types';
+import { plans } from '../data';
+import { Link } from 'react-router-dom';
 
 export const Pricing: React.FC = () => {
-  const plans: Plan[] = [
-    {
-      name: "Plan Mensual",
-      price: "$25.000",
-      period: "/mes",
-      features: [
-        "Acceso ilimitado al gimnasio",
-        "Sin costo de matrícula",
-        "Evaluación inicial básica",
-        "Acceso a camarines y duchas",
-        "Sin contrato de permanencia"
-      ]
-    },
-    {
-      name: "Plan Trimestral",
-      price: "$65.000",
-      period: "/3 meses",
-      recommended: true,
-      features: [
-        "Ahorras $10.000",
-        "Acceso ilimitado al gimnasio",
-        "Sin costo de matrícula",
-        "Plan de entrenamiento personalizado",
-        "Acceso a eventos comunitarios",
-        "1 Sesión de Recovery gratis"
-      ]
-    },
-    {
-      name: "Plan Semestral",
-      price: "$120.000",
-      period: "/6 meses",
-      features: [
-        "Ahorras $30.000",
-        "Todo lo del plan trimestral",
-        "Congelamiento de plan (15 días)",
-        "Polera oficial Titans House",
-        "Descuento en suplementos"
-      ]
-    }
-  ];
-
-  const handleWhatsApp = (planName: string) => {
-    const message = `Hola! Me interesa inscribirme en el ${planName} de Titans House.`;
-    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
-  };
-
   return (
     <section id="plans" className="py-24 bg-titan-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +37,7 @@ export const Pricing: React.FC = () => {
               </div>
 
               <ul className="flex-1 space-y-4 mb-8">
-                {plan.features.map((feature, idx) => (
+                {plan.features.slice(0, 5).map((feature, idx) => (
                   <li key={idx} className="flex items-start text-gray-300 text-sm">
                     <Check className="h-5 w-5 text-titan-gold mr-3 flex-shrink-0" />
                     {feature}
@@ -90,13 +45,14 @@ export const Pricing: React.FC = () => {
                 ))}
               </ul>
 
-              <Button 
-                variant={plan.recommended ? 'primary' : 'outline'} 
-                fullWidth
-                onClick={() => handleWhatsApp(plan.name)}
-              >
-                Elegir Plan
-              </Button>
+              <Link to={`/plan/${plan.id}`} className="w-full">
+                <Button 
+                  variant={plan.recommended ? 'primary' : 'outline'} 
+                  fullWidth
+                >
+                  Ver Detalles del Plan
+                </Button>
+              </Link>
             </div>
           ))}
         </div>

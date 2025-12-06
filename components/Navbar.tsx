@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Dumbbell } from 'lucide-react';
 import { NavItem } from '../types';
 import { Button } from './Button';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const navItems: NavItem[] = [
   { label: 'Inicio', href: '#home' },
@@ -15,6 +16,8 @@ const navItems: NavItem[] = [
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,18 +29,37 @@ export const Navbar: React.FC = () => {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    
+    if (href.startsWith('#')) {
+      const targetId = href.substring(1);
+      
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Give time for the home page to mount
+        setTimeout(() => {
+          const element = document.getElementById(targetId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    } else {
+      navigate(href);
     }
   };
 
   const openWhatsApp = () => {
-    window.open('https://wa.me/56962169412', '_blank');
+    const message = "Hola! Quiero mi prueba gratuita en Titans House.";
+    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/95 backdrop-blur-sm border-b border-white/10 py-2' : 'bg-transparent py-4'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || location.pathname !== '/' ? 'bg-black/95 backdrop-blur-sm border-b border-white/10 py-2' : 'bg-transparent py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           {/* Logo */}
@@ -67,7 +89,7 @@ export const Navbar: React.FC = () => {
               </a>
             ))}
             <Button variant="primary" className="py-2 px-4 text-sm" onClick={openWhatsApp}>
-              Matrícula Gratis
+              Prueba Gratuita
             </Button>
           </div>
 
@@ -101,7 +123,7 @@ export const Navbar: React.FC = () => {
           ))}
           <div className="pt-4">
             <Button fullWidth onClick={openWhatsApp}>
-              Solicitar Matrícula Gratis
+              Solicitar Prueba Gratuita
             </Button>
           </div>
         </div>
