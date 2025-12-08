@@ -22,7 +22,7 @@ export const Footer: React.FC = React.memo(() => {
         </div>
 
         <div className="text-gray-500 text-sm mb-6 md:mb-0 text-center md:text-left">
-          &copy; Gym Titans House. Todos los derechos reservado.<br/>
+          &copy; Gym Titans House. Todos los derechos reservados.<br/>
           Rengo, Chile.
         </div>
 
