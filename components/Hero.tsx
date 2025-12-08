@@ -15,7 +15,7 @@ const HERO_STYLE_GUIDE = Object.freeze({
 
 // Asset Constants
 const MOBILE_ASSET_URL = "https://0170a6c2.assets-581.pages.dev/mobileherovideogit.mp4";
-const DESKTOP_ASSET_URL = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop";
+const DESKTOP_ASSET_URL = "https://0170a6c2.assets-581.pages.dev/gym1.jpg";
 
 export const Hero: React.FC = () => {
   const [hoursText, setHoursText] = useState("");
