@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Menu, X } from 'lucide-react';
 import { NavItem } from '../types';
 import { Button } from './Button';
@@ -13,15 +13,12 @@ const navItems: NavItem[] = [
 ];
 
 // --- EASY EDIT CONFIGURATION ---
-const NAV_CONFIG = {
-  // Spacing between logo and top of screen
+const NAV_CONFIG = Object.freeze({
   logoPaddingTop: "py-4", 
   logoPaddingScrolled: "py-2",
-  // Gap between menu items
   menuGap: "gap-4 lg:gap-8",
-  // Background opacity
   bgScrolled: "bg-black/95 backdrop-blur-sm"
-};
+});
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +28,16 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const isScrolled = window.scrollY > 20;
+      if (scrolled !== isScrolled) {
+        setScrolled(isScrolled);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [scrolled]);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = useCallback((href: string) => {
     setIsOpen(false);
     
     if (href.startsWith('#')) {
@@ -45,7 +45,6 @@ export const Navbar: React.FC = () => {
       
       if (location.pathname !== '/') {
         navigate('/');
-        // Give time for the home page to mount
         setTimeout(() => {
           const element = document.getElementById(targetId);
           if (element) {
@@ -61,12 +60,17 @@ export const Navbar: React.FC = () => {
     } else {
       navigate(href);
     }
-  };
+  }, [location.pathname, navigate]);
 
-  const openWhatsApp = () => {
+  const openWhatsApp = useCallback(() => {
     const message = "Hola! Quiero mi prueba gratuita en Titans House.";
-    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
-  };
+    // Security: noopener,noreferrer prevents tabnabbing
+    window.open(
+      `https://wa.me/56962169412?text=${encodeURIComponent(message)}`, 
+      '_blank', 
+      'noopener,noreferrer'
+    );
+  }, []);
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled || location.pathname !== '/' ? `${NAV_CONFIG.bgScrolled} border-b border-white/10 ${NAV_CONFIG.logoPaddingScrolled}` : `bg-transparent ${NAV_CONFIG.logoPaddingTop}`}`}>
@@ -77,7 +81,9 @@ export const Navbar: React.FC = () => {
             <img 
               src="https://github.com/Myraval1/titanshouseassets/raw/0c6ec7f1989e62f1ff71ba6a9cf6310fd529ba4a/nobglogo.png" 
               alt="Logo Titans House" 
-              className="w-20 mr-2 rounded-full" 
+              className="w-20 mr-2 rounded-full"
+              width="80"
+              height="80" 
             />
             <div className="flex flex-col">
               <span className="text-xl font-heading font-bold text-white tracking-widest leading-none">TITANS</span>
@@ -85,7 +91,7 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Desktop Nav - Optimized for Tablet (md) to prevent overlap */}
+          {/* Desktop Nav */}
           <div className={`hidden md:flex items-center ${NAV_CONFIG.menuGap}`}>
             {navItems.map((item) => (
               <a
@@ -110,6 +116,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-white hover:text-titan-gold focus:outline-none"
+              aria-label="Toggle menu"
             >
               {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
             </button>
@@ -133,7 +140,6 @@ export const Navbar: React.FC = () => {
               {item.label}
             </a>
           ))}
-          {/* Note: Solicitar Prueba Gratuita button removed from mobile menu as per previous request */}
         </div>
       </div>
     </nav>

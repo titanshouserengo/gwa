@@ -5,7 +5,7 @@ import { Button } from './Button';
 
 // --- EASY EDIT: REPLACE GALLERY LINKS BELOW ---
 // Instructions: Paste your image address (URL) inside the quotes for each slot.
-const GALLERY_URLS = {
+const GALLERY_URLS = Object.freeze({
   img1: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070",
   img2: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975",
   img3: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070",
@@ -16,7 +16,7 @@ const GALLERY_URLS = {
   img8: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=1000",
   img9: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=1000",
   img10: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=2069"
-};
+});
 
 // Map the URLs to the structure used by the page
 const GALLERY_IMAGES = [

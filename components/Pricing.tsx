@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 import { Button } from './Button';
 import { plans } from '../data';
 import { Link } from 'react-router-dom';
 
-export const Pricing: React.FC = () => {
-  // Select a few highlight plans to show on landing page
-  const featuredPlans = [
+export const Pricing: React.FC = React.memo(() => {
+  // Memoize the featured plans selection so it doesn't run on every render
+  const featuredPlans = useMemo(() => [
     plans.find(p => p.id === 'general-mensual'),
-    plans.find(p => p.id === 'asistido-4-dias'), // Popular mid-tier
-    plans.find(p => p.id === 'trimestral-asistido') // High value
-  ].filter(Boolean); // Remove undefined if any
+    plans.find(p => p.id === 'asistido-4-dias'),
+    plans.find(p => p.id === 'trimestral-asistido')
+  ].filter(Boolean), []);
 
   return (
     <section id="plans" className="py-24 bg-titan-dark">
@@ -22,7 +22,7 @@ export const Pricing: React.FC = () => {
           </p>
         </div>
 
-        {/* Featured Cards - Changed grid-cols-3 to grid-cols-2 on MD to allow more space */}
+        {/* Featured Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {featuredPlans.map((plan, index) => (
             <div 
@@ -67,7 +67,6 @@ export const Pricing: React.FC = () => {
           ))}
         </div>
 
-        {/* View All Button */}
         <div className="flex justify-center">
             <Link to="/planes">
                 <Button variant="primary" className="px-12 py-4 text-lg flex items-center group">
@@ -79,4 +78,6 @@ export const Pricing: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+Pricing.displayName = 'Pricing';

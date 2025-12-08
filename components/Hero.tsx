@@ -1,23 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from './Button';
 import { ArrowRight, MapPin, Car } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // --- EASY EDIT CONFIGURATION ---
-const HERO_STYLE_GUIDE = {
-  // Mobile | Tablet | Desktop
-  // pt-20 = Mobile Padding
-  // md:pt-32 = Tablet Padding
-  // lg:pt-32 = Desktop Padding
-  paddingTop: "pt-24 md:pt-32 lg:pt-32",
+const HERO_STYLE_GUIDE = Object.freeze({
+  paddingTop: "pt-24 md:pt-28 lg:pt-28",
   paddingBottom: "pb-40 md:pb-32",
   titleSize: "text-5xl md:text-7xl",
   subtitleSize: "text-xl md:text-2xl",
   buttonSpacing: "gap-4",
-  // Updated: flex-col for mobile, md:flex-row for tablet/desktop
-  // mt-8 for mobile (compact), mt-12 for desktop
   footerSpacing: "mt-8 md:mt-12 flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-6 text-sm text-gray-400 font-medium w-full"
-};
+});
 
 // Asset Constants
 const MOBILE_ASSET_URL = "https://github.com/Myraval1/titanshouseassets/raw/187a94feda946d144898f7f504e16412839a8075/mobileherovideogit.mp4";
@@ -28,6 +22,8 @@ export const Hero: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+
     const calculateHours = async () => {
       const now = new Date();
       const year = now.getFullYear();
@@ -37,15 +33,11 @@ export const Hero: React.FC = () => {
       const dayOfWeek = now.getDay(); // 0 = Sun, 1 = Mon, ... 6 = Sat
 
       // 1. Determine standard closing time based on weekday
-      let standardClosingTime = "";
-      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-        standardClosingTime = "23:00"; // Mon-Fri
-      } else {
-        standardClosingTime = "14:00"; // Sat-Sun
-      }
+      let standardClosingTime = (dayOfWeek >= 1 && dayOfWeek <= 5) ? "23:00" : "14:00";
 
-      // Initial render with standard time
-      setHoursText(`Abierto Hoy hasta las ${standardClosingTime}`);
+      if (isMounted) {
+        setHoursText(`Abierto Hoy hasta las ${standardClosingTime}`);
+      }
 
       // 2. Check if today is a holiday via API
       let isHoliday = false;
@@ -55,16 +47,16 @@ export const Hero: React.FC = () => {
         
         if (response.ok) {
           const data = await response.json();
-          const holidayDates = data.map((h: any) => h.date);
-          
-          if (holidayDates.includes(todayString)) {
+          // Use a Set for O(1) lookup
+          const holidayDates = new Set(data.map((h: any) => h.date));
+          if (holidayDates.has(todayString)) {
             isHoliday = true;
           }
         } else {
           throw new Error("Failed to fetch holidays");
         }
       } catch (error) {
-        // Fallback for 2025 fixed holidays if API fails
+        // Fallback for 2025 fixed holidays
         const fixedHolidays2025 = [
             "2025-01-01", "2025-04-18", "2025-04-19", "2025-05-01", 
             "2025-05-21", "2025-06-20", "2025-06-29", "2025-07-16", 
@@ -77,12 +69,22 @@ export const Hero: React.FC = () => {
       }
 
       // 3. Override closing time if it is a holiday
-      if (isHoliday) {
+      if (isHoliday && isMounted) {
         setHoursText(`Abierto Hoy hasta las 14:00`);
       }
     };
 
     calculateHours();
+
+    return () => { isMounted = false; };
+  }, []);
+
+  const openWhatsApp = useCallback(() => {
+    window.open(
+        `https://wa.me/56962169412?text=${encodeURIComponent("Hola! Quiero mi prueba gratuita en Titans House.")}`, 
+        '_blank', 
+        'noopener,noreferrer'
+    );
   }, []);
 
   return (
@@ -99,7 +101,6 @@ export const Hero: React.FC = () => {
         >
           <source src={MOBILE_ASSET_URL} type="video/mp4" />
         </video>
-        {/* Stronger overlay for mobile video readability */}
         <div className="absolute inset-0 bg-black/60 bg-gradient-to-t from-black via-black/40 to-black/70"></div>
       </div>
 
@@ -109,8 +110,8 @@ export const Hero: React.FC = () => {
           src={DESKTOP_ASSET_URL} 
           alt="Gimnasio Titans House en Rengo Chile - Entrenamiento funcional y pesas" 
           className="w-full h-full object-cover"
+          loading="eager"
         />
-        {/* Standard overlay for desktop */}
         <div className="absolute inset-0 bg-black/70 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
       </div>
 
@@ -133,7 +134,7 @@ export const Hero: React.FC = () => {
           
           <div className={`flex flex-col sm:flex-row ${HERO_STYLE_GUIDE.buttonSpacing} mb-6 md:mb-0`}>
             <Button 
-                onClick={() => window.open(`https://wa.me/56962169412?text=${encodeURIComponent("Hola! Quiero mi prueba gratuita en Titans House.")}`, '_blank')}
+                onClick={openWhatsApp}
                 className="text-lg px-8 py-4 flex items-center justify-center group"
             >
               PRUEBA GRATUITA <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -147,7 +148,6 @@ export const Hero: React.FC = () => {
             </Button>
           </div>
 
-          {/* Info Footer - Stacked on Mobile, Row on Desktop */}
           <div className={HERO_STYLE_GUIDE.footerSpacing}>
             <div className="flex items-center gap-2">
               <div className="w-5 flex justify-center md:w-auto">
@@ -159,7 +159,6 @@ export const Hero: React.FC = () => {
             <span className="hidden md:block text-zinc-600">|</span>
             
             <div className="flex items-center gap-2">
-               {/* Mobile-only MapPin to align visually in the stack */}
                <div className="md:hidden w-5 flex justify-center">
                   <MapPin size={16} className="text-titan-gold" />
                </div>
@@ -168,7 +167,6 @@ export const Hero: React.FC = () => {
 
             <span className="hidden md:block text-zinc-600">|</span>
 
-            {/* Parking - Mobile: Stacked below. Desktop: Inline */}
             <div className="flex items-center gap-2 mt-0 md:mt-0">
                <div className="w-5 flex justify-center">
                   <Car size={16} className="text-titan-gold" />

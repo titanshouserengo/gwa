@@ -1,9 +1,13 @@
 import React from 'react';
 
-export const WhatsAppWidget: React.FC = () => {
+export const WhatsAppWidget: React.FC = React.memo(() => {
   const handleClick = () => {
     const message = "Hola! Tengo una consulta sobre Gym Titans House.";
-    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(
+        `https://wa.me/56962169412?text=${encodeURIComponent(message)}`, 
+        '_blank',
+        'noopener,noreferrer'
+    );
   };
 
   return (
@@ -26,4 +30,6 @@ export const WhatsAppWidget: React.FC = () => {
       </button>
     </div>
   );
-};
+});
+
+WhatsAppWidget.displayName = 'WhatsAppWidget';

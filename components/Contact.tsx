@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { MapPin, Phone, Mail, Clock, Instagram } from 'lucide-react';
+import { MapPin, Phone, Clock, Instagram } from 'lucide-react';
 import { Button } from './Button';
 
 type ContactFormInputs = {
@@ -15,10 +15,13 @@ export const Contact: React.FC = () => {
   const onSubmit = (data: ContactFormInputs) => {
     // Construct WhatsApp message
     const text = `Hola Titans House, mi nombre es ${data.name}. Mi objetivo es ${data.goal} y me gustaría más información. Mi teléfono es ${data.phone}.`;
-    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(
+        `https://wa.me/56962169412?text=${encodeURIComponent(text)}`, 
+        '_blank',
+        'noopener,noreferrer'
+    );
   };
 
-  // Using the Business Name in the query ensures the pin is on the correct business location
   const mapUrl = "https://www.google.com/maps?q=Gym+Titans+House+Rengo&output=embed";
 
   return (
@@ -44,7 +47,7 @@ export const Contact: React.FC = () => {
                   <h4 className="text-white font-bold uppercase mb-1">Dirección</h4>
                   <p className="text-gray-400">Rinconada de Malambo 1670-B</p>
                   <p className="text-gray-500 text-sm">Rengo, O'Higgins, Chile</p>
-                  <a href="https://maps.app.goo.gl/HTWBhcawZDuG7ZG49" target="_blank" rel="noreferrer" className="text-titan-gold text-sm underline mt-1 block hover:text-white">Ver en Google Maps</a>
+                  <a href="https://maps.app.goo.gl/HTWBhcawZDuG7ZG49" target="_blank" rel="noopener noreferrer" className="text-titan-gold text-sm underline mt-1 block hover:text-white">Ver en Google Maps</a>
                 </div>
               </div>
 
@@ -71,7 +74,7 @@ export const Contact: React.FC = () => {
                   <h4 className="text-white font-bold uppercase mb-1">Contacto</h4>
                   <p className="text-gray-400">+56 9 6216 9412</p>
                   <div className="flex gap-4 mt-2">
-                    <a href="https://www.instagram.com/titans_house_" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-titan-gold transition">
+                    <a href="https://www.instagram.com/titans_house_" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-titan-gold transition">
                       <Instagram />
                     </a>
                   </div>

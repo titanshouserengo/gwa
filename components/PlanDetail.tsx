@@ -24,7 +24,11 @@ export const PlanDetail: React.FC = () => {
 
   const handleWhatsApp = () => {
     const message = `Hola! Me interesa inscribirme en el ${plan.name} de Titans House.`;
-    window.open(`https://wa.me/56962169412?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(
+        `https://wa.me/56962169412?text=${encodeURIComponent(message)}`, 
+        '_blank',
+        'noopener,noreferrer'
+    );
   };
 
   const handleBack = (e: React.MouseEvent) => {

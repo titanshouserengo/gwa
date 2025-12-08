@@ -1,7 +1,15 @@
 import React from 'react';
 import { Wallet, Unlock, Award } from 'lucide-react';
 
-export const Features: React.FC = () => {
+// --- EASY EDIT CONFIGURATION ---
+const FEATURES_LAYOUT = Object.freeze({
+  overlap: "-mt-32 md:-mt-20",
+  padding: "py-20 md:py-40",
+  titleSize: "text-2xl",
+  cardBg: "bg-zinc-900"
+});
+
+export const Features: React.FC = React.memo(() => {
   const features = [
     {
       icon: <Wallet className="h-10 w-10 text-titan-gold" />,
@@ -21,21 +29,20 @@ export const Features: React.FC = () => {
   ];
 
   return (
-    <section id="features" className="py-20 md:py-40 bg-titan-dark relative">
+    <section id="features" className={`${FEATURES_LAYOUT.padding} bg-titan-dark relative`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Semantic H2 for SEO (Screen reader only to maintain design overlap) */}
-        <h2 className="sr-only">Nuestras Ventajas y Diferenciadores</h2>
+        <h2 className="sr-only">Beneficios Titans House</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10 -mt-32 md:-mt-20">
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10 ${FEATURES_LAYOUT.overlap}`}>
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="bg-zinc-900 border-b-4 border-titan-gold p-8 rounded-sm shadow-xl hover:transform hover:-translate-y-2 transition-all duration-300"
+              className={`${FEATURES_LAYOUT.cardBg} border-b-4 border-titan-gold p-8 rounded-sm shadow-xl hover:transform hover:-translate-y-2 transition-all duration-300`}
             >
               <div className="bg-zinc-800 w-20 h-20 rounded-full flex items-center justify-center mb-6">
                 {feature.icon}
               </div>
-              <h3 className="text-2xl font-heading font-bold text-white mb-4 uppercase">{feature.title}</h3>
+              <h3 className={`${FEATURES_LAYOUT.titleSize} font-heading font-bold text-white mb-4 uppercase`}>{feature.title}</h3>
               <p className="text-gray-400 leading-relaxed">
                 {feature.description}
               </p>
@@ -45,4 +52,6 @@ export const Features: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+Features.displayName = 'Features';

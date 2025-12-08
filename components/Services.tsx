@@ -4,28 +4,20 @@ import { Button } from './Button';
 import { useNavigate } from 'react-router-dom';
 
 // --- EASY EDIT: REPLACE IMAGE LINKS BELOW ---
-// Instructions: Paste your image address (URL) inside the quotes.
-const SERVICE_IMAGES = {
-  // Image for "Musculación" card
+const SERVICE_IMAGES = Object.freeze({
   musculacion: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop",
-  
-  // Image for "Recovery" card
   recovery: "https://images.unsplash.com/photo-1544367563-12123d896889?q=80&w=2070&auto=format&fit=crop",
-  
-  // Image for "Comunidad" card
   comunidad: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop",
-  
-  // Image for "Beneficios" card
   beneficios: "https://images.unsplash.com/photo-1576678927484-cc907957088c?q=80&w=1974&auto=format&fit=crop"
-};
+});
 
-const SERVICES_LAYOUT = {
+const SERVICES_LAYOUT = Object.freeze({
   padding: "py-24 md:py-32 lg:py-40",
   titleSize: "text-4xl md:text-5xl",
   gridGap: "gap-6 md:gap-8 lg:gap-10"
-};
+});
 
-export const Services: React.FC = () => {
+export const Services: React.FC = React.memo(() => {
   const navigate = useNavigate();
 
   return (
@@ -44,6 +36,7 @@ export const Services: React.FC = () => {
               src={SERVICE_IMAGES.musculacion}
               alt="Entrenamiento de musculación en Gimnasio Titans House Rengo" 
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
             <div className="absolute bottom-0 left-0 p-6">
@@ -58,6 +51,7 @@ export const Services: React.FC = () => {
               src={SERVICE_IMAGES.recovery}
               alt="Servicio de Masoterapia y Recovery muscular en Rengo" 
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
             <div className="absolute bottom-0 left-0 p-6">
@@ -72,6 +66,7 @@ export const Services: React.FC = () => {
               src={SERVICE_IMAGES.comunidad}
               alt="Comunidad fitness Gym Titans House, gimnasio sin contratos" 
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
             <div className="absolute bottom-0 left-0 p-6">
@@ -86,6 +81,7 @@ export const Services: React.FC = () => {
               src={SERVICE_IMAGES.beneficios}
               alt="Beneficios y descuentos en gimnasio económico Rengo" 
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
             <div className="absolute bottom-0 left-0 p-6">
@@ -96,7 +92,6 @@ export const Services: React.FC = () => {
           </div>
         </div>
 
-        {/* Call to Action for Gallery */}
         <div className="flex justify-center">
             <Button 
                 variant="outline" 
@@ -109,4 +104,6 @@ export const Services: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+Services.displayName = 'Services';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Instagram, Facebook } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC = React.memo(() => {
   return (
     <footer className="bg-zinc-950 border-t border-zinc-900 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
@@ -11,6 +11,9 @@ export const Footer: React.FC = () => {
             src="https://github.com/Myraval1/titanshouseassets/raw/0c6ec7f1989e62f1ff71ba6a9cf6310fd529ba4a/nobglogo.png" 
             alt="Logo Titans House" 
             className="w-20 mr-2 rounded-full" 
+            loading="lazy"
+            width="80"
+            height="80"
           />
           <div className="flex flex-col">
             <span className="text-lg font-heading font-bold text-white tracking-widest leading-none">TITANS</span>
@@ -24,10 +27,10 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex space-x-6 md:mr-24">
-          <a href="https://www.instagram.com/titans_house_" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-titan-gold transition-colors">
+          <a href="https://www.instagram.com/titans_house_" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-titan-gold transition-colors">
             <Instagram size={24} />
           </a>
-          <a href="https://www.facebook.com/people/Titans-house/61579827960944/" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-titan-gold transition-colors">
+          <a href="https://www.facebook.com/people/Titans-house/61579827960944/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-titan-gold transition-colors">
             <Facebook size={24} />
           </a>
         </div>
@@ -35,4 +38,6 @@ export const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
+});
+
+Footer.displayName = 'Footer';

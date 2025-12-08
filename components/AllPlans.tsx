@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { plans } from '../data';
 import { Button } from './Button';
 import { Check, Star, ArrowLeft } from 'lucide-react';
@@ -12,14 +12,15 @@ export const AllPlans: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredPlans = plans.filter(p => p.category === activeTab);
-  
-  // Helper to group plans
-  const groupedPlans = {
-    mensual: filteredPlans.filter(p => p.subCategory === 'mensual'),
-    largoPlazo: filteredPlans.filter(p => p.subCategory === 'largo_plazo'),
-    am: filteredPlans.filter(p => p.subCategory === 'am')
-  };
+  // Memoize grouped plans to prevent recalculation on every render
+  const groupedPlans = useMemo(() => {
+    const filteredPlans = plans.filter(p => p.category === activeTab);
+    return {
+        mensual: filteredPlans.filter(p => p.subCategory === 'mensual'),
+        largoPlazo: filteredPlans.filter(p => p.subCategory === 'largo_plazo'),
+        am: filteredPlans.filter(p => p.subCategory === 'am')
+    };
+  }, [activeTab]);
 
   const handleBack = () => {
     navigate('/');
@@ -148,8 +149,8 @@ export const AllPlans: React.FC = () => {
   );
 };
 
-// Helper Subcomponent
-const PlanCard: React.FC<{ plan: any, isLongTerm?: boolean }> = ({ plan, isLongTerm }) => {
+// Helper Subcomponent - Wrapped in Memo for performance when switching tabs
+const PlanCard: React.FC<{ plan: any, isLongTerm?: boolean }> = React.memo(({ plan, isLongTerm }) => {
   const navigate = useNavigate();
   
   return (
@@ -184,4 +185,6 @@ const PlanCard: React.FC<{ plan: any, isLongTerm?: boolean }> = ({ plan, isLongT
       </Button>
     </div>
   );
-};
+});
+
+PlanCard.displayName = 'PlanCard';
