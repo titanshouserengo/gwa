@@ -90,7 +90,7 @@ export const Hero: React.FC = () => {
   return (
     <section id="home" className="relative min-h-[85vh] flex items-center bg-black overflow-hidden">
       
-      {/* Mobile Video Background - Optimized: preload="auto" */}
+      {/* Mobile Video Background - Pure Video No Poster */}
       <div className="absolute inset-0 z-0 block md:hidden">
         <video
           autoPlay

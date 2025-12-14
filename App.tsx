@@ -11,19 +11,55 @@ import { Loader } from './components/Loader';
 
 // Component to force download of images in background
 const AssetWarmer = () => {
+    // Simple check to avoid downloading desktop assets on mobile and vice versa
+    // This runs once on mount.
+    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
-        <div className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none" aria-hidden="true">
-            {/* Services */}
+        <div className="absolute w-0 h-0 overflow-hidden opacity-0 pointer-events-none" aria-hidden="true" style={{ display: 'none' }}>
+            {/* CRITICAL: Logo */}
+            <img src="https://0170a6c2.assets-581.pages.dev/nobglogo.png" loading="eager" fetchPriority="high" alt="" />
+            
+            {/* CRITICAL: Responsive Hero Asset */}
+            {isDesktop ? (
+                <img 
+                    src="https://0170a6c2.assets-581.pages.dev/gym1.jpg" 
+                    loading="eager" 
+                    fetchPriority="high" 
+                    alt="" 
+                />
+            ) : (
+                <>
+                    {/* Mobile Video Only - No Poster */}
+                    <video 
+                        src="https://0170a6c2.assets-581.pages.dev/mobileherovideogit.mp4" 
+                        preload="auto" 
+                        muted 
+                        playsInline 
+                    />
+                </>
+            )}
+
+            {/* Services (High Probability of View) */}
             <img src="https://0170a6c2.assets-581.pages.dev/musculacion.jpg" loading="eager" alt="" />
             <img src="https://0170a6c2.assets-581.pages.dev/recovery.jpg" loading="eager" alt="" />
             <img src="https://0170a6c2.assets-581.pages.dev/comunidad.jpg" loading="eager" alt="" />
             <img src="https://0170a6c2.assets-581.pages.dev/beneficios.jpg" loading="eager" alt="" />
+            
             {/* Community */}
             <img src="https://0170a6c2.assets-581.pages.dev/2dafam1.jpg" loading="eager" alt="" />
             <img src="https://0170a6c2.assets-581.pages.dev/2dafam2.jpg" loading="eager" alt="" />
             <img src="https://0170a6c2.assets-581.pages.dev/2dafam3.jpg" loading="eager" alt="" />
-            {/* Mobile Video Cache Warmer */}
-            <video src="https://0170a6c2.assets-581.pages.dev/mobileherovideogit.mp4" preload="auto" muted playsInline />
+
+            {/* Gallery Top Hits (Preload first few for speed) */}
+            <img src="https://0170a6c2.assets-581.pages.dev/gym2.jpg" loading="lazy" alt="" />
+            <img src="https://0170a6c2.assets-581.pages.dev/gym3.jpg" loading="lazy" alt="" />
         </div>
     )
 }
@@ -40,11 +76,11 @@ function App() {
       setIsLoading(false);
     } else {
       // If first time, show loader for a set time
-      // increased to 2.0 seconds
+      // increased to 2.5 seconds to allow more cache warming on mobile data
       const timer = setTimeout(() => {
         setIsLoading(false);
         sessionStorage.setItem('hasVisitedTitans', 'true');
-      }, 2000); 
+      }, 2500); 
 
       return () => clearTimeout(timer);
     }
